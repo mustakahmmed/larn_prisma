@@ -14,17 +14,34 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  role ROLE @default(USER)
   posts Post[]
+  profiles Prrofile?
+}
+
+model Prrofile {
+  id Int @id @default(autoincrement())
+  bio String?
+  dathOfBirth DateTime?
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+  id Int @id @default(autoincrement())
+  title String
+  content String?
+  isPublished Boolean @default(false)
+  createAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authrId Int
+  author User @relation(fields: [authrId], references: [id])
+}
+
+enum ROLE {
+  USER
+  ADMIN
 }
